@@ -1,3 +1,13 @@
+const url = "https://your-site.netlify.app/.netlify/functions/open-ai";
+
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.text);
+    // Do something with the data
+  });
+
+
 /*
 const { Configuration, OpenAIApi } = require("openai");
 const fetch = require("node-fetch");
@@ -19,7 +29,7 @@ const configuration = new Configuration({
     console.log(completion.data.choices[0].text);
 }
 // runCompletion();
-*/
+
 
 const apiKey = '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'; // Replace with your actual API key
 
@@ -48,6 +58,7 @@ async function getSummary(prompt) {
 }
 
 getSummary('how are you doing today?');
+*/
 
 
 
