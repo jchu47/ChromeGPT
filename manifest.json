@@ -1,7 +1,7 @@
 {
-  "name": "ChromeGPT",
+  "name": "Bad Vibes Blocker",
   "version": "1.0.0",
-  "description": "Summarizes video or text on the current page",
+  "description": "Gives a rating of the current websites vibes.",
   "manifest_version": 3,
   "author": "Moiz Rauf & Justin Chu",
   "permissions": [
@@ -11,8 +11,11 @@
   "host_permissions": [
     "https://api.openai.com/*"
   ],
+  "icons": {
+    "128": "assets/joy.png"
+  },
   "action":{
       "default_popup": "index.html",
-      "default_title": "ChromeGPT"
+      "default_title": "Bad Vibes Blocker"
   }
 }

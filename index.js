@@ -61,12 +61,51 @@ function getSentiment(text) {
 }
 
 function postSentiment(sentimentObj){
-  const mainEmotion = sentimentObj.emotions_detected[0];
-  const newTitle = document.createElement('h2');
-  newTitle.textContent = mainEmotion;
-  const results = document.querySelector('.results');
-  results.appendChild(newTitle);
-  return mainEmotion;
+
+  const resultsDiv = document.createElement('div');
+  resultsDiv.className = "results";
+
+  const mainEmotionsArray = sentimentObj.emotions_detected;
+
+  if (mainEmotionsArray.length === 0){
+    const emotionDiv = document.createElement('div');
+
+    const emotion = 'There are no emotions';
+    const emotionTitle = document.createElement('h2');
+    emotionTitle.textContent = emotion;
+    const emoji = document.createElement('img');
+    emoji.setAttribute('src', `assets/blank.png`);
+    emoji.style.height = `${100}px`;
+    emoji.style.width = `${100}px`;
+
+    emotionDiv.appendChild(emoji);
+    emotionDiv.appendChild(emotionTitle);
+
+    resultsDiv.appendChild(emotionDiv);
+  }
+  
+
+  for (let i = 0; i < mainEmotionsArray.length; i++){
+    const emotionDiv = document.createElement('div');
+
+    const emotion = mainEmotionsArray[i];
+    const emotionTitle = document.createElement('h2');
+    emotionTitle.textContent = emotion;
+
+    const normalizedVal = sentimentObj.emotions_normalized[emotion]; // out of 1.0
+    const emoji = document.createElement('img');
+    emoji.setAttribute('src', `assets/${emotion}.png`);
+    emoji.style.height = `${100*normalizedVal}px`;
+    emoji.style.width = `${100*normalizedVal}px`;
+
+    emotionDiv.appendChild(emoji);
+    emotionDiv.appendChild(emotionTitle);
+
+    resultsDiv.appendChild(emotionDiv);
+  }
+  document.body.appendChild(resultsDiv);
+  console.log('I should have appended a resultsDiv');
+  return mainEmotionsArray;
 }
 
 
@@ -74,6 +113,10 @@ function postSentiment(sentimentObj){
 const scrape = document.querySelector('#scrape');
 
 scrape.addEventListener("click", () => {
+
+  const resultsDiv2 = document.querySelector('.results');
+  if (resultsDiv2) resultsDiv2.remove();
+
 
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     chrome.scripting.executeScript({
