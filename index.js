@@ -21,6 +21,38 @@ const configuration = new Configuration({
 // runCompletion();
 */
 
+const apiKey = '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'; // Replace with your actual API key
+
+async function getSummary(prompt) {
+  const url = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${apiKey}`,
+  };
+  const body = JSON.stringify({
+    prompt: prompt,
+    max_tokens: 4000
+  });
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: body
+    });
+    const data = await response.json();
+    console.log(data.choices[0].text); // Log the text response
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+getSummary('how are you doing today?');
+
+
+
+/*
+
 console.log('this should absolutely log');
 const newTitle = document.querySelector('h1');
 newTitle.innerHTML = 'this is another test';
@@ -47,7 +79,9 @@ scrape.addEventListener("click", () => {
       console.log(data);
       newTitle.textContent = data;
       document.body.appendChild(newTitle);
+      getSummary("can you guess what this webpage is about? This is the title: "+newTitle);
     }
   });
 
 })
+*/
