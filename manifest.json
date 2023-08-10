@@ -1,0 +1,15 @@
+{
+  "name": "ChromeGPT",
+  "version": "1.0.0",
+  "description": "Summarizes video or text on the current page",
+  "manifest_version": 3,
+  "author": "Moiz Rauf & Justin Chu",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "action":{
+      "default_popup": "index.html",
+      "default_title": "ChromeGPT"
+  }
+}
