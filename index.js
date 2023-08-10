@@ -19,44 +19,57 @@ const configuration = new Configuration({
     console.log(completion.data.choices[0].text);
 }
 // runCompletion();
-
-
-const apiKey = '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'; // Replace with your actual API key
-
-async function getSummary(prompt) {
-  const url = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${apiKey}`,
-  };
-  const body = JSON.stringify({
-    prompt: prompt,
-    max_tokens: 4000
-  });
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: body
-    });
-    const data = await response.json();
-    console.log(data.choices[0].text); // Log the text response
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-getSummary('how are you doing today?');
 */
 
-
+function getSentiment(text) {
+  console.log(text);
+  const url = 'https://twinword-emotion-analysis-v1.p.rapidapi.com/analyze/';
+  const options = {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'X-RapidAPI-Key': 'cc6d546621msh5332edea6a65114p10b853jsn30909faf5831',
+      'X-RapidAPI-Host': 'twinword-emotion-analysis-v1.p.rapidapi.com'
+    },
+    body: new URLSearchParams({
+      text: `${text}`
+    })
+  };
 
 /*
+{"emotions_detected":["anger","joy"],
+"emotion_scores":{"anger":0.1938118836150085,"joy":0.1471822913875334,"disgust":0,"sadness":0,"surprise":0,"fear":0},
+"emotions_normalized":{"anger":0.9690594180750426,"joy":0.735911456937667,"disgust":0,"sadness":0,"surprise":0,"fear":0},
+"thresholds_normalized":{"disgust":0.2,"sadness":0.2,"anger":0.2,"joy":0.2,"surprise":0.2,"fear":0.2},"version":"7.5.6",
+"author":"twinword inc.","email":"help@twinword.com","result_code":"200","result_msg":"Success"}
+*/
 
-console.log('this should absolutely log');
-const newTitle = document.querySelector('h1');
-newTitle.innerHTML = 'this is another test';
+  fetch(url, options)
+    .then(response => {
+      return response.text();
+    })
+    .then(sentimentObjStr => {
+      console.log(sentimentObjStr);
+      return JSON.parse(sentimentObjStr);
+    })
+    .then(sentimentObj => {
+      return postSentiment(sentimentObj);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+function postSentiment(sentimentObj){
+  const mainEmotion = sentimentObj.emotions_detected[0];
+  const newTitle = document.createElement('h2');
+  newTitle.textContent = mainEmotion;
+  const results = document.querySelector('.results');
+  results.appendChild(newTitle);
+  return mainEmotion;
+}
+
+
 
 const scrape = document.querySelector('#scrape');
 
@@ -74,15 +87,9 @@ scrape.addEventListener("click", () => {
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log('i heard a message');
     if (request.action == "extractedData") {
-      var data = request.data; // The extracted data
-      // Now you can use this data in your popup
-      const newTitle = document.createElement('h2');
-      console.log(data);
-      newTitle.textContent = data;
-      document.body.appendChild(newTitle);
-      getSummary("can you guess what this webpage is about? This is the title: "+newTitle);
+      const text = request.data;
+      getSentiment(text);
     }
   });
 
 })
-*/
