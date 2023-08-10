@@ -1,13 +1,3 @@
-const url = "https://your-site.netlify.app/.netlify/functions/open-ai";
-
-fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data.text);
-    // Do something with the data
-  });
-
-
 /*
 const { Configuration, OpenAIApi } = require("openai");
 const fetch = require("node-fetch");
